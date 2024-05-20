@@ -636,15 +636,15 @@ rbns_data = {
 		"80nM" : "https://www.encodeproject.org/files/ENCFF005JOX/@@download/ENCFF005JOX.fastq.gz",
 		"1300nM" : "https://www.encodeproject.org/files/ENCFF514BCR/@@download/ENCFF514BCR.fastq.gz",
 		"input" : "https://www.encodeproject.org/files/ENCFF647VIQ/@@download/ENCFF647VIQ.fastq.gz" },
-	"PTBP1" : {
-		"5nM" : "REVOKED",
-		"20nM" : "REVOKED",
-		"80nM" : "REVOKED",
-		"320nM" : "REVOKED",
-		"1300nM" : "REVOKED",
-		"3900nM" : "REVOKED" },
-	"RALY" : {
-		"RALY" : "REVOKED" },
+	# "PTBP1" : {
+	# 	"5nM" : "REVOKED",
+	# 	"20nM" : "REVOKED",
+	# 	"80nM" : "REVOKED",
+	# 	"320nM" : "REVOKED",
+	# 	"1300nM" : "REVOKED",
+	# 	"3900nM" : "REVOKED" },
+	# "RALY" : {
+	# 	"RALY" : "REVOKED" },
 	"RBM11" : {
 		"5nM" : "https://www.encodeproject.org/files/ENCFF767VHJ/@@download/ENCFF767VHJ.fastq.gz",
 		"80nM" : "https://www.encodeproject.org/files/ENCFF604IEH/@@download/ENCFF604IEH.fastq.gz",
