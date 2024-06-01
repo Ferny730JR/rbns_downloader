@@ -32,12 +32,14 @@ class RBNSDownloader:
 				filename=f'{target}_{files}.fasta.gz'
 
 				# Print update to console
-				print(f"Downloading {ANSI_COLOR_CYAN}{filename}{ANSI_COLOR_RESET} [{i+1}/{num_files}]...")
+				if self.verbose:
+					print(f"Downloading {ANSI_COLOR_CYAN}{filename}{ANSI_COLOR_RESET} [{i+1}/{num_files}]...")
 
 				# Download the file
 				self.download_file(url=url, save_dir=out, filename=filename)
 				remove_lines(1)
-			print(f"Downloaded {ANSI_COLOR_CYAN}{target}{ANSI_COLOR_RESET} [{num_files}/{num_files}]")
+			if self.verbose:
+				print(f"Downloaded {ANSI_COLOR_CYAN}{target}{ANSI_COLOR_RESET} [{num_files}/{num_files}]")
 		else:
 			self._check_typo_(target=target)
 	
@@ -66,9 +68,12 @@ class RBNSDownloader:
 
 		# Begin download
 		with requests.get(url, stream=True) as r:
-			# r.raise_for_status()
+			r.raise_for_status()
 			with open(local_filename, 'wb') as f:
-				self._download_progress_(filename=filename, response=r, out_file=f)
+				if(self.verbose):
+					self._download_progress_(filename=filename, response=r, out_file=f)
+				else:
+					self._download_(response=r, out_file=f)
 	
 	def list_all(self) -> None:
 		print(f'{ANSI_COLOR_BRIGHT}Available RBNS experiments:{ANSI_COLOR_RESET}')
@@ -98,7 +103,7 @@ class RBNSDownloader:
 		else:
 			self._check_typo_(target=target)
 	
-	def _download_progress_(self, filename: str, response: Response, out_file: BufferedWriter) -> None:
+	def _download_progress_(self, str, response: Response, out_file: BufferedWriter) -> None:
 		expected_size = int(response.headers.get('content-length'))/(self.chunk_size)
 		bar = Bar(expected_size=expected_size)
 
@@ -109,6 +114,10 @@ class RBNSDownloader:
 
 		# Remove download bar
 		remove_line()
+	
+	def _download_(self, response: Response, out_file: BufferedWriter) -> None:
+		for chunk in response.iter_content(chunk_size=self.chunk_size):
+			out_file.write(chunk)
 
 	def _check_typo_(self, target: str) -> None:
 		min_dist= float('inf')
