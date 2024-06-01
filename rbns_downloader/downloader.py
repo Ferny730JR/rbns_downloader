@@ -23,7 +23,8 @@ class RBNSDownloader:
 			self.download_experiment(target=target)
 	
 	def download_experiment(self, target: str) -> None:
-		if target in self.__rbns_data:
+		if target.upper() in self.__rbns_data:
+			target = target.upper()
 			num_files = len(self.__rbns_data[target])
 			for i,files in enumerate(self.__rbns_data[target].keys()):
 				# Extract the download information
@@ -71,7 +72,7 @@ class RBNSDownloader:
 			r.raise_for_status()
 			with open(local_filename, 'wb') as f:
 				if(self.verbose):
-					self._download_progress_(filename=filename, response=r, out_file=f)
+					self._download_progress_(response=r, out_file=f)
 				else:
 					self._download_(response=r, out_file=f)
 	
@@ -81,7 +82,8 @@ class RBNSDownloader:
 			print(f'  - {ANSI_COLOR_CYAN}{target}{ANSI_COLOR_RESET}')
 	
 	def list_experiment(self, target: str) -> None:
-		if target in self.__rbns_data:
+		if target.upper() in self.__rbns_data:
+			target = target.upper()
 			controls = [concentration for concentration in self.__rbns_data[target].keys() if concentration == '0nM' or concentration == 'input']
 			concentrations = [concentration for concentration in self.__rbns_data[target].keys() if concentration != '0nM' and concentration != 'input']
 
@@ -103,7 +105,7 @@ class RBNSDownloader:
 		else:
 			self._check_typo_(target=target)
 	
-	def _download_progress_(self, str, response: Response, out_file: BufferedWriter) -> None:
+	def _download_progress_(self, response: Response, out_file: BufferedWriter) -> None:
 		expected_size = int(response.headers.get('content-length'))/(self.chunk_size)
 		bar = Bar(expected_size=expected_size)
 
@@ -124,7 +126,7 @@ class RBNSDownloader:
 		experiment_match = "None"
 
 		for experiment in self.__rbns_data.keys():
-			dist = damerau_levenshtein_distance(target, experiment)
+			dist = damerau_levenshtein_distance(target.upper(), experiment.upper())
 			if(dist < min_dist):
 				min_dist = dist
 				experiment_match = experiment
